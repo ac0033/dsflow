@@ -1,0 +1,413 @@
+{
+  "$defs": {
+    "BackEdge": {
+      "additionalProperties": true,
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "title": "Label",
+          "type": "string"
+        },
+        "loop": {
+          "default": false,
+          "title": "Loop",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "title": "BackEdge",
+      "type": "object"
+    },
+    "Dependency": {
+      "additionalProperties": true,
+      "properties": {
+        "from": {
+          "title": "From",
+          "type": "string"
+        },
+        "to": {
+          "title": "To",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "title": "Dependency",
+      "type": "object"
+    },
+    "Group": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Group",
+      "type": "object"
+    },
+    "Revision": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "pending_approval",
+            "in_progress",
+            "awaiting_acceptance",
+            "partial",
+            "done",
+            "stopped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "dir": {
+          "title": "Dir",
+          "type": "string"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "acceptance_report": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Acceptance Report"
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "dir"
+      ],
+      "title": "Revision",
+      "type": "object"
+    },
+    "RevisionLoop": {
+      "additionalProperties": true,
+      "properties": {
+        "step": {
+          "title": "Step",
+          "type": "string"
+        },
+        "from_revision": {
+          "title": "From Revision",
+          "type": "string"
+        },
+        "to_revision": {
+          "title": "To Revision",
+          "type": "string"
+        },
+        "label": {
+          "default": "",
+          "title": "Label",
+          "type": "string"
+        }
+      },
+      "required": [
+        "step",
+        "from_revision",
+        "to_revision"
+      ],
+      "title": "RevisionLoop",
+      "type": "object"
+    },
+    "Stage": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "dir": {
+          "title": "Dir",
+          "type": "string"
+        },
+        "color": {
+          "default": "#64748b",
+          "title": "Color",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "dir"
+      ],
+      "title": "Stage",
+      "type": "object"
+    },
+    "Step": {
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "stage": {
+          "title": "Stage",
+          "type": "integer"
+        },
+        "order": {
+          "title": "Order",
+          "type": "integer"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "dir": {
+          "title": "Dir",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "pending_approval",
+            "in_progress",
+            "awaiting_acceptance",
+            "partial",
+            "done",
+            "stopped"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "op": {
+          "default": "",
+          "title": "Op",
+          "type": "string"
+        },
+        "finding": {
+          "default": "",
+          "title": "Finding",
+          "type": "string"
+        },
+        "decision": {
+          "default": "",
+          "title": "Decision",
+          "type": "string"
+        },
+        "execution_notebooks": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Execution Notebooks"
+        },
+        "execution_scripts": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Execution Scripts"
+        },
+        "current_revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current Revision"
+        },
+        "revisions": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/Revision"
+          },
+          "title": "Revisions",
+          "type": "array"
+        },
+        "acceptance_report": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Acceptance Report"
+        },
+        "group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Group"
+        },
+        "headline": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Headline"
+        },
+        "key_artifacts": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Key Artifacts",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "stage",
+        "order",
+        "title",
+        "dir",
+        "status"
+      ],
+      "title": "Step",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "stages": {
+      "items": {
+        "$ref": "#/$defs/Stage"
+      },
+      "title": "Stages",
+      "type": "array"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/Step"
+      },
+      "title": "Steps",
+      "type": "array"
+    },
+    "dependencies": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Dependency"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Dependencies"
+    },
+    "back_edges": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/BackEdge"
+      },
+      "title": "Back Edges",
+      "type": "array"
+    },
+    "revision_loops": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/RevisionLoop"
+      },
+      "title": "Revision Loops",
+      "type": "array"
+    },
+    "groups": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Group"
+      },
+      "default": {},
+      "title": "Groups",
+      "type": "object"
+    },
+    "notes": {
+      "default": "",
+      "title": "Notes",
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "stages",
+    "steps"
+  ],
+  "title": "Registry",
+  "type": "object"
+}

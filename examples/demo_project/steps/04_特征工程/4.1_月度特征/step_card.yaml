@@ -1,0 +1,49 @@
+step: "4.1"
+headline: 特征 54,000 行（3,000 个 SKU × 2025-01～2026-06 共 18 个月）；每个特征只用该月之前的需求量，季节系数只用训练期估计，可以继续
+can_continue: true
+core_numbers:
+  - label: 特征行
+    before: 72000
+    change: -18000
+    after: 54000
+    scope: 删除历史不足 6 个月（2024-07～2024-12）的 18,000 行
+    source: "outputs/features.parquet#rows"
+  - label: 训练期行
+    after: 36000
+    scope: 2025-01 至 2025-12
+    source: "outputs/features.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '训练'"
+  - label: 验证期行
+    after: 9000
+    scope: 2026-01 至 2026-03
+    source: "outputs/features.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '验证'"
+  - label: 最终评估期行
+    after: 9000
+    scope: 2026-04 至 2026-06
+    source: "outputs/features.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '最终评估'"
+operation: 每个 SKU 按月份排序，构造上月、前 2 月、前 3 月需求量，近 3 月均值、近 6 月均值；同类目季节系数只用训练期估计，乘以近 3 月均值作为季节调整特征。
+exceptions: []
+artifacts:
+  - {path: outputs/features.parquet, purpose: SKU×月特征，一行 = 一个 SKU 的一个月, kind: table}
+  - {path: outputs/season_table.json, purpose: 只用训练期估计的同类目季节系数, kind: table}
+why: 预测某个月时，只有更早的月份是已知的；用到当月或以后的数据，验证结果会虚高。
+invariants:
+  - 特征行 = SKU 数 × 18（3,000 × 18 = 54,000）
+  - 所有特征只来自更早的月份
+can_say:
+  - 训练、验证、最终评估期的特征都只用到了各自月份之前的需求量
+cannot_say:
+  - 还不知道哪些特征有用，7.1 在验证期比较
+next: 6.1 用这些特征算基线误差；7.1 训练线性模型
+examples:
+  - title: SKU00302 在 2026-05 的特征
+    input: SKU00302 2025-12 到 2026-04 的需求量：0、113、8、17、19
+    rule: 上月 = 前 1 个月，近 3 月均值 = 前 3 个月平均，近 6 月均值 = 前 6 个月平均，都不含 2026-05 本月
+    output: 2026-05 这一行：上月需求量 19、前 2 月 17、前 3 月 8、近 3 月均值 14.67、近 6 月均值 27.67；本月需求量 2 是预测目标
+    artifact: outputs/features.parquet
+    real: true
+  - title: 季节系数只用训练期
+    input: 办公通用物资 5 月的季节系数：2.1 用全部 24 个月估计是 1.0339
+    rule: 4.1 只用训练期（2024-07～2025-12）重新估计
+    output: 特征里用的是 1.0389
+    artifact: outputs/season_table.json
+    real: true

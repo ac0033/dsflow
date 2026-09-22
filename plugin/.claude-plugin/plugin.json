@@ -1,0 +1,8 @@
+{
+  "name": "dsflow",
+  "description": "DSFlow 数据科学项目全周期追踪：在被管项目里推进每一步的 skill、改讲解时自动体检的 hook、把命令行包成工具的 MCP 服务。",
+  "version": "0.31.0",
+  "author": {
+    "name": "DSFlow"
+  }
+}

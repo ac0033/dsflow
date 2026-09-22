@@ -1,0 +1,69 @@
+/* 术语提示：正文里的虚线下划线 + 由 TermTip 摆位置的白话解释浮层 */
+.term {
+  border-bottom: 1px dashed #94a3b8;
+  cursor: help;
+}
+.term:hover,
+.term:focus-visible {
+  border-bottom-color: #2563eb;
+  outline: none;
+}
+/* 钉住的那个词自己也标出来，读者知道浮层说的是哪个词 */
+.term.is-pinned {
+  border-radius: 3px;
+  border-bottom-color: #2563eb;
+  background: #dbeafe;
+  box-shadow: 0 0 0 2px #dbeafe;
+}
+
+.term-tip {
+  position: fixed;
+  z-index: 60;
+  width: max-content;
+  max-width: min(26rem, calc(100vw - 16px));
+  border-radius: 8px;
+  background: #0f172a;
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: #f8fafc;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 25%);
+  pointer-events: none;
+}
+/* 钉住以后可以选中里面的字、点关闭 */
+.term-tip.is-pinned {
+  pointer-events: auto;
+  box-shadow: 0 10px 28px rgb(15 23 42 / 35%);
+}
+.term-tip-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.term-tip-name {
+  font-weight: 600;
+  color: #fff;
+}
+.term-tip-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.term-tip-head button {
+  margin-left: auto;
+  border-radius: 4px;
+  padding: 1px;
+  color: #cbd5e1;
+}
+.term-tip-head button:hover {
+  background: #1e293b;
+  color: #fff;
+}
+.term-tip-plain {
+  white-space: normal;
+}

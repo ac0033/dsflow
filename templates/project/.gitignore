@@ -1,0 +1,5 @@
+# DSFlow 缓存（Parquet 转换、数据画像），可随时重建
+.dsflow/cache/
+
+# 项目自己的分析环境（dsflow init 建，dsflow attach . --venv 可重建）
+.venv/

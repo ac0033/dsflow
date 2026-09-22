@@ -1,0 +1,50 @@
+step: "3.1"
+headline: SKU×月面板 72,000 行（3,000 个 SKU × 24 个月），训练期 54,000、验证期 9,000、最终评估期 9,000；需求量合计与 1.2 一致，可以继续
+can_continue: true
+core_numbers:
+  - label: 面板行
+    after: 72000
+    scope: 3,000 个 SKU × 24 个月，一行 = 一个 SKU 的一个月
+    source: "outputs/panel.parquet#rows"
+  - label: 训练期行
+    after: 54000
+    scope: 2024-07 至 2025-12，18 个月
+    source: "outputs/panel.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '训练'"
+  - label: 验证期行
+    after: 9000
+    scope: 2026-01 至 2026-03
+    source: "outputs/panel.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '验证'"
+  - label: 最终评估期行
+    after: 9000
+    scope: 2026-04 至 2026-06，只留给 7.1 的最终模型评估一次
+    source: "outputs/panel.parquet#sql:SELECT count(*) FROM data WHERE 划分 = '最终评估'"
+  - label: 需求量合计
+    after: 547214
+    scope: 面板全部行的需求量合计，与 1.2 非退货订单行的数量合计相等
+    source: "outputs/panel.parquet#sum:需求量"
+  - label: 需求量为 0 的 SKU 月
+    after: "22.73%"
+    scope: 需求量为 0 的行 ÷ 面板行
+    source: "outputs/split_summary.json#/需求量为0的比例"
+operation: 每个 SKU 每个月一行，没有非退货订单行的月份需求量记为 0；按月份切出训练期、验证期、最终评估期。
+exceptions:
+  - 需求量为 0 的 SKU 月占 22.73%：SKU 级的月需求量稀疏、波动大，这会限制任何模型的准确度
+artifacts:
+  - {path: outputs/panel.parquet, purpose: SKU×月需求量面板，带划分标记, kind: table}
+  - {path: outputs/split_summary.json, purpose: 各划分的月份与行数, kind: table}
+why: 预测是"用过去预测下个月"，所以只能按时间切：用更早的月份学，用更晚的月份检验；最终评估期在选定方法前不能碰。
+invariants:
+  - 面板行 = SKU 数 × 24（3,000 × 24 = 72,000）
+  - 面板需求量合计 = 1.2 非退货订单行的数量合计（547,214）
+can_say:
+  - 每个 SKU 在 24 个月里都有一行，没有缺月
+cannot_say:
+  - 还不能说按 SKU 预测一定比按类目预测好：需求量为 0 的 SKU 月占两成多
+next: 4.1 在面板上构造只用过去信息的特征
+examples:
+  - title: 没有订单的月份记为 0
+    input: SKU00302 2025-12 到 2026-06 的需求量：0、113、8、17、19、2、8
+    rule: 某月没有非退货订单行，需求量记为 0，而不是缺失
+    output: 面板中 SKU00302 2025-12 一行，需求量 0，划分 = 训练
+    artifact: outputs/panel.parquet
+    real: true

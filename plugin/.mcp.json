@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "dsflow": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--project",
+        "${CLAUDE_PLUGIN_ROOT}/..",
+        "--extra",
+        "mcp",
+        "dsflow",
+        "mcp"
+      ]
+    }
+  }
+}

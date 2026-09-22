@@ -1,0 +1,93 @@
+{
+  "$defs": {
+    "DatasetEntry": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "stage": {
+          "default": "raw",
+          "title": "Stage",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "path"
+      ],
+      "title": "DatasetEntry",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "question": {
+      "default": "",
+      "title": "Question",
+      "type": "string"
+    },
+    "registry": {
+      "default": "lifecycle/steps.json",
+      "title": "Registry",
+      "type": "string"
+    },
+    "vocabulary": {
+      "default": "vocabulary.json",
+      "title": "Vocabulary",
+      "type": "string"
+    },
+    "datasets": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DatasetEntry"
+      },
+      "title": "Datasets",
+      "type": "array"
+    },
+    "metric_goals": {
+      "additionalProperties": {
+        "enum": [
+          "min",
+          "max"
+        ],
+        "type": "string"
+      },
+      "default": {},
+      "description": "指标方向：min 越小越好 / max 越大越好；停止规则据此判断提升",
+      "title": "Metric Goals",
+      "type": "object"
+    },
+    "guide_lint": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "type": "integer"
+        },
+        "type": "object"
+      },
+      "default": {},
+      "description": "讲解体检的字数阈值覆盖：limits（开头六段上限）、cell_limits（每格上限）、min_len（下限）",
+      "title": "Guide Lint",
+      "type": "object"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "ProjectConfig",
+  "type": "object"
+}

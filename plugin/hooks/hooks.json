@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run --project \"${CLAUDE_PLUGIN_ROOT}/..\" dsflow hook guide-lint",
+            "timeout": 120
+          }
+        ]
+      }
+    ]
+  }
+}

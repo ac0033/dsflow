@@ -1,0 +1,21 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.dsflow_home/
+# 演示数据由 examples/demo_project/scripts/make_data.py 生成
+examples/demo_project/data/
+examples/demo_project/.dsflow/
+# 演示项目的产物由 examples/demo_project/scripts/run_all.py 重新生成
+examples/demo_project/steps/**/outputs/
+web/node_modules/
+web/dist/
+*.tsbuildinfo
+
+dist/
+
+# 开发者私人材料（方案、交接记录、真实项目快照、性能脚本），不进版本库
+/.notes/
+# 本仓库的 Claude Code 本地配置
+/.claude/
+*.bundle

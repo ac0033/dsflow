@@ -1,0 +1,24 @@
+# 步骤说明卡模板。只写平台会用的字段：一句话结论、能否继续、核心数字（看板画图 / 平台回产物核对）、产物（产物图 / 看板图像）。
+# 易错点写在 guide.yaml 的 cannot_say，操作与例外写在讲解和用户报告里，这里不重复。
+# 术语只用数据表字段或 vocabulary.json 里登记过的说法。
+step: "1.2"
+revision: r01
+headline: 订单清洗已完成，验收通过，可以进入 2.1 需求分布探索。
+can_continue: true
+core_numbers:
+  - label: 订单行数
+    before: 120000
+    change: -1830
+    after: 118170
+    unit: 行
+    scope: 订单明细的记录数（不是不同订单号个数），全期
+    # 出处：平台按这里从产物重算「处理后」的数字来核对。取值方式见 docs/contracts/step_card.schema.json
+    source: "outputs/row_count_ledger.csv#sql:SELECT 行数 FROM data WHERE 处理 = '清洗后'"
+artifacts:
+  # 只登记最终有用的文件：后续要用的表、给业务看的图和报告、模型。中间结果和核对清单不登记。
+  - path: outputs/orders_clean.parquet
+    purpose: 清洗后的订单明细，供 2.1 和 3.1 使用
+    kind: table
+  - path: outputs/rows_by_rule.svg
+    purpose: 每条清洗规则删掉多少行，看板直接显示
+    kind: figure

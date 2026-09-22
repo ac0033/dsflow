@@ -1,0 +1,133 @@
+{
+  "$defs": {
+    "StatusChange": {
+      "additionalProperties": true,
+      "properties": {
+        "status": {
+          "enum": [
+            "candidate",
+            "accepted",
+            "delivered"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "at": {
+          "title": "At",
+          "type": "string"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "at"
+      ],
+      "title": "StatusChange",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "一个模型版本：模型文件按内容哈希区分；数据版本、代码版本、指标都从产出它的运行记录追溯。",
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "description": "模型文件 SHA256 前 12 位",
+      "title": "Version",
+      "type": "string"
+    },
+    "sha256": {
+      "title": "Sha256",
+      "type": "string"
+    },
+    "path": {
+      "title": "Path",
+      "type": "string"
+    },
+    "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "mtime_ns": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "登记时的修改时间，用来不算哈希地快速发现文件被动过",
+      "title": "Mtime Ns"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "产出这个模型的运行",
+      "title": "Run Id"
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "status": {
+      "default": "candidate",
+      "enum": [
+        "candidate",
+        "accepted",
+        "delivered"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "history": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/StatusChange"
+      },
+      "title": "History",
+      "type": "array"
+    },
+    "registered_at": {
+      "title": "Registered At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "sha256",
+    "path",
+    "size_bytes",
+    "registered_at"
+  ],
+  "title": "ModelVersion",
+  "type": "object"
+}

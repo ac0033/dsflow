@@ -1,0 +1,65 @@
+step: "1.2"
+headline: 清洗完成：订单行 121,000 → 119,998，删除完全重复行 1,000、未来日期 2；其余订单行的数量与金额原样保留，可以进入 2.1 和 3.1
+can_continue: true
+core_numbers:
+  - label: 订单行
+    before: 121000
+    change: -1002
+    after: 119998
+    scope: 订单明细记录数（不是不同订单号个数）
+    source: "outputs/row_ledger.csv#sql:SELECT 行数 FROM data WHERE 处理 = '清洗后'"
+  - label: 删除完全重复行
+    after: 1000
+    scope: 所有字段都相同的多余行
+    source: "outputs/row_ledger.csv#sql:SELECT 行数 FROM data WHERE 处理 = '删除完全重复行'"
+  - label: 删除未来日期
+    after: 2
+    scope: 下单时间晚于 2026-06-30 的订单行
+    source: "outputs/row_ledger.csv#sql:SELECT 行数 FROM data WHERE 处理 = '删除未来日期'"
+  - label: 退货行
+    after: 361
+    scope: 清洗后数量为负的订单行，只标记（是否退货），不删除
+    source: "outputs/orders_clean.parquet#sql:SELECT count(*) FROM data WHERE 是否退货"
+  - label: 金额未知
+    after: 636
+    scope: 清洗后金额为空的订单行，只标记（金额未知），不删除
+    source: "outputs/orders_clean.parquet#sql:SELECT count(*) FROM data WHERE 金额未知"
+  - label: 非退货订单行的数量合计
+    after: 547214
+    scope: 清洗后、退货行以外的数量合计；2.1、3.1 的需求量合计都应等于它
+    source: "outputs/orders_clean.parquet#sql:SELECT sum(数量) FROM data WHERE NOT 是否退货"
+operation: 删除完全重复行和下单时间晚于 2026-06 的行；商品名称统一全角 / 半角并去掉首尾空白；退货行、金额未知的行加标记列，不删除、不改数值。
+exceptions:
+  - 1.1 数到的金额缺失 641 行、数量为负 364 行，清洗后是 636 和 361：差的 5 行和 3 行都在删除的 1,002 行里
+artifacts:
+  - {path: outputs/orders_clean.parquet, purpose: 清洗后订单明细，一行 = 一个订单行, kind: table}
+  - {path: outputs/row_ledger.csv, purpose: 行数台账：每一步删了多少行, kind: table}
+why: 重复行会把同一笔需求算两次；未来日期落在预测期之外。退货行和金额未知不删，是因为它们仍是真实订单行，是否计入需求量在 2.1 决定。
+invariants:
+  - 原始行数 − 删除行数 = 清洗后行数（121,000 − 1,000 − 2 = 119,998）
+  - 保留下来的订单行，数量与金额不被改动
+concentration: 删除的行只有两类：完全重复行 1,000、未来日期 2
+can_say:
+  - 清洗后每个订单行只出现一次
+cannot_say:
+  - 还不能说金额未知的 636 行对金额分析有多大影响（本项目预测的是数量，暂不需要）
+next: 2.1 确定需求量口径并看季节性；3.1 构造 SKU×月面板
+examples:
+  - title: 未来日期被删除
+    input: 订单号 SO202701000000，下单时间 2027-01-05 00:00:00，SKU02343，数量 1
+    rule: 下单时间晚于数据截止月 2026-06 的行删除
+    output: 不在 orders_clean.parquet 里，计入删除未来日期 2 行之一
+    artifact: outputs/row_ledger.csv
+    real: true
+  - title: 商品名称规范化
+    input: 订单号 SO202407013742，SKU00136，商品名称「Ａ４复印纸 加厚56型　」（全角 Ａ４，结尾一个全角空格）
+    rule: 统一全角 / 半角（NFKC）并去掉首尾空白
+    output: 商品名称「A4复印纸 加厚56型」
+    artifact: outputs/orders_clean.parquet
+    real: true
+  - title: 退货行只标记
+    input: 订单号 SO202407060071，SKU02380，数量 −6，金额 −2209.68
+    rule: 数量为负的订单行标记为退货，不删除、不改数值
+    output: 保留在 orders_clean.parquet，是否退货 = true
+    artifact: outputs/orders_clean.parquet
+    real: true

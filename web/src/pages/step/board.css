@@ -1,0 +1,157 @@
+/* ---------- 思维导图：根在左，分支向右展开；连线用 CSS 画 ---------- */
+.mm-wrap {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 14px 16px;
+  overflow-x: auto;
+}
+.mm {
+  display: flex;
+  align-items: center;
+  min-width: max-content;
+}
+.mm-root {
+  flex: none;
+  max-width: 11rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+.mm-branches {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mm-branches > li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+/* 横线：从竖线连到节点 */
+.mm-branches > li::before {
+  content: '';
+  position: absolute;
+  left: -36px;
+  top: 50%;
+  width: 36px;
+  height: 2px;
+  background: #cbd5e1;
+}
+/* 竖线：上半段 + 下半段，首尾各去一半 */
+.mm-branches > li::after {
+  content: '';
+  position: absolute;
+  left: -36px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #cbd5e1;
+}
+.mm-branches > li:first-child::after {
+  top: 50%;
+}
+.mm-branches > li:last-child::after {
+  bottom: 50%;
+}
+.mm-branches > li:only-child::after {
+  display: none;
+}
+.mm-children {
+  padding-left: 28px;
+}
+.mm-children > li::before {
+  left: -28px;
+  width: 28px;
+}
+.mm-children > li::after {
+  left: -28px;
+}
+.mm-node {
+  flex: none;
+  max-width: 24rem;
+  padding: 7px 11px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #1e293b;
+}
+.mm-node .lbl {
+  display: inline-block;
+  margin-right: 6px;
+  padding: 0 6px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: #e2e8f0;
+  color: #475569;
+  vertical-align: 1px;
+}
+.mm-node.strong {
+  font-weight: 600;
+  font-size: 14px;
+}
+.mm-node.tone-q {
+  border-color: #bfdbfe;
+  background: #eff6ff;
+}
+.mm-node.tone-q .lbl {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.mm-node.tone-a {
+  border-color: #86efac;
+  background: #f0fdf4;
+}
+.mm-node.tone-a .lbl {
+  background: #bbf7d0;
+  color: #166534;
+}
+.mm-node.tone-next {
+  border-color: #ddd6fe;
+  background: #f5f3ff;
+}
+.mm-node.tone-next .lbl {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+.mm-node.tone-part {
+  border-color: #93c5fd;
+  background: #fff;
+  font-weight: 600;
+}
+.mm-node.tone-part .lbl {
+  background: #2563eb;
+  color: #fff;
+}
+.mm-node.leaf {
+  max-width: 26rem;
+  background: #fff;
+}
+
+/* ---------- 核心数字的条形图：中线为 0，正值向右、负值向左 ---------- */
+.bar {
+  position: absolute;
+  top: 5px;
+  height: 14px;
+  border-radius: 3px;
+}
+.bar.after {
+  background: #2563eb;
+}
+.bar.before {
+  top: 2px;
+  height: 20px;
+  background: #dbeafe;
+}

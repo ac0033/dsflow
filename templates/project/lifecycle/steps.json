@@ -1,0 +1,22 @@
+{
+  "title": "__NAME__",
+  "stages": [
+    {"id": 1, "name": "① 数据预处理", "dir": "steps/01_数据预处理", "color": "#3b82f6"},
+    {"id": 2, "name": "② 探索性数据分析", "dir": "steps/02_EDA", "color": "#10b981"},
+    {"id": 3, "name": "③ 数据划分", "dir": "steps/03_数据划分", "color": "#eab308"},
+    {"id": 4, "name": "④ 特征工程", "dir": "steps/04_特征工程", "color": "#ec4899"},
+    {"id": 5, "name": "⑤ 特征选择", "dir": "steps/05_特征选择", "color": "#8b5cf6"},
+    {"id": 6, "name": "⑥ 基线模型", "dir": "steps/06_基线模型", "color": "#64748b"},
+    {"id": 7, "name": "⑦ 模型选择与训练", "dir": "steps/07_模型选择与训练", "color": "#0ea5e9"},
+    {"id": 8, "name": "⑧ 超参数调优", "dir": "steps/08_超参数调优", "color": "#f97316"},
+    {"id": 9, "name": "⑨ 评估与诊断", "dir": "steps/09_评估与诊断", "color": "#14b8a6"},
+    {"id": 10, "name": "⑩ 可解释性", "dir": "steps/10_可解释性", "color": "#d946ef"},
+    {"id": 11, "name": "⑪ 部署与交付", "dir": "steps/11_部署与交付", "color": "#84cc16"}
+  ],
+  "steps": [],
+  "dependencies": [],
+  "back_edges": [],
+  "revision_loops": [],
+  "groups": {},
+  "notes": ""
+}

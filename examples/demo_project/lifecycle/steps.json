@@ -1,0 +1,97 @@
+{
+  "title": "工业品商城月度需求预测（演示）",
+  "stages": [
+    {"id": 1, "name": "① 数据预处理", "dir": "steps/01_数据预处理", "color": "#3b82f6"},
+    {"id": 2, "name": "② 探索性数据分析", "dir": "steps/02_EDA", "color": "#10b981"},
+    {"id": 3, "name": "③ 数据划分", "dir": "steps/03_数据划分", "color": "#eab308"},
+    {"id": 4, "name": "④ 特征工程", "dir": "steps/04_特征工程", "color": "#ec4899"},
+    {"id": 5, "name": "⑤ 特征选择", "dir": "steps/05_特征选择", "color": "#8b5cf6"},
+    {"id": 6, "name": "⑥ 基线模型", "dir": "steps/06_基线模型", "color": "#64748b"},
+    {"id": 7, "name": "⑦ 模型选择与训练", "dir": "steps/07_模型选择与训练", "color": "#0ea5e9"},
+    {"id": 8, "name": "⑧ 超参数调优", "dir": "steps/08_超参数调优", "color": "#f97316"},
+    {"id": 9, "name": "⑨ 评估与诊断", "dir": "steps/09_评估与诊断", "color": "#14b8a6"},
+    {"id": 10, "name": "⑩ 可解释性", "dir": "steps/10_可解释性", "color": "#d946ef"},
+    {"id": 11, "name": "⑪ 部署与交付", "dir": "steps/11_部署与交付", "color": "#84cc16"}
+  ],
+  "steps": [
+    {
+      "id": "1.1", "stage": 1, "order": 1, "title": "数据源盘点",
+      "dir": "steps/01_数据预处理/1.1_数据源盘点", "status": "awaiting_acceptance",
+      "op": "确认订单明细每行、每个字段的含义，逐项计数质量问题",
+      "finding": "121,000 行 × 12 列；完全重复行 1,000、金额缺失 641、数量为负 364、未来日期 2",
+      "decision": "1.2 删除完全重复行与未来日期，退货行与金额缺失只标记",
+      "execution_notebooks": ["steps/01_数据预处理/1.1_数据源盘点/nb_1.1.ipynb"]
+    },
+    {
+      "id": "1.2", "stage": 1, "order": 2, "title": "订单清洗",
+      "dir": "steps/01_数据预处理/1.2_订单清洗", "status": "awaiting_acceptance",
+      "op": "删除完全重复行与未来日期，规范商品名称；退货行与金额未知只标记不删除",
+      "finding": "订单行 121,000 → 119,998（删除完全重复行 1,000、未来日期 2）；退货行 361、金额未知 636 只标记",
+      "decision": "进入 2.1、3.1",
+      "execution_notebooks": ["steps/01_数据预处理/1.2_订单清洗/nb_1.2.ipynb"]
+    },
+    {
+      "id": "2.1", "stage": 2, "order": 3, "title": "需求分布探索",
+      "dir": "steps/02_EDA/2.1_需求分布探索", "status": "awaiting_acceptance",
+      "op": "看各类目月度需求量的季节性，确定需求量口径（退货行不计入）",
+      "finding": "三个类目都有季节性：电力物资 12 月 1.4864、MRO工业品 10 月 1.3070、办公通用物资 3 月 1.1769",
+      "decision": "4.1 加季节调整特征，季节系数只用训练期估计",
+      "execution_notebooks": ["steps/02_EDA/2.1_需求分布探索/nb_2.1.ipynb"]
+    },
+    {
+      "id": "3.1", "stage": 3, "order": 4, "title": "按时间切分",
+      "dir": "steps/03_数据划分/3.1_按时间切分", "status": "awaiting_acceptance",
+      "op": "构造 SKU×月需求量面板，按月份切出训练期、验证期、最终评估期",
+      "finding": "3,000 个 SKU × 24 个月 = 72,000 行；训练期 54,000、验证期 9,000、最终评估期 9,000；需求量为 0 的 SKU 月占 22.73%",
+      "decision": "进入 4.1",
+      "execution_notebooks": ["steps/03_数据划分/3.1_按时间切分/nb_3.1.ipynb"]
+    },
+    {
+      "id": "4.1", "stage": 4, "order": 5, "title": "月度特征",
+      "dir": "steps/04_特征工程/4.1_月度特征", "status": "awaiting_acceptance",
+      "op": "只用预测月之前的需求量构造特征；季节系数只用训练期估计",
+      "finding": "特征 54,000 行（2025-01～2026-06），每个特征只用该月之前的需求量",
+      "decision": "进入 6.1、7.1",
+      "execution_notebooks": ["steps/04_特征工程/4.1_月度特征/nb_4.1.ipynb"]
+    },
+    {
+      "id": "6.1", "stage": 6, "order": 6, "title": "基线模型",
+      "dir": "steps/06_基线模型/6.1_基线模型", "status": "awaiting_acceptance",
+      "op": "给出不用训练的方法在验证期的误差，作为模型必须超过的线",
+      "finding": "最好的基线是近 6 月均值，验证期 MAE 6.9544",
+      "decision": "7.1 的模型验证期 MAE 须低于 6.9544",
+      "execution_notebooks": ["steps/06_基线模型/6.1_基线模型/nb_6.1.ipynb"]
+    },
+    {
+      "id": "7.1", "stage": 7, "order": 7, "title": "线性模型训练",
+      "dir": "steps/07_模型选择与训练/7.1_线性模型训练", "status": "awaiting_acceptance",
+      "op": "在验证期比较特征组合，训练最终模型并只在最终评估期评估一次",
+      "finding": "验证期 MAE 6.6481（最好的基线 6.9544）；最终评估期 6.6127（同期近 6 月均值基线 6.8679）",
+      "decision": "登记 sku_demand_linear 为候选，等你验收",
+      "execution_notebooks": ["steps/07_模型选择与训练/7.1_线性模型训练/nb_7.1.ipynb"]
+    },
+    {
+      "id": "11.1", "stage": 11, "order": 8, "title": "交付与预测",
+      "dir": "steps/11_部署与交付/11.1_交付与预测", "status": "awaiting_acceptance",
+      "op": "用登记的模型出下月各 SKU 需求量预测与提前备货清单，完成交付清单",
+      "finding": "2026-07 预测 3,000 个 SKU，按演示规则提示提前备货 42 个",
+      "decision": "交付清单齐全后由你确认验收与交付；部署方式待定",
+      "execution_notebooks": ["steps/11_部署与交付/11.1_交付与预测/nb_11.1.ipynb"]
+    }
+  ],
+  "dependencies": [
+    {"from": "1.1", "to": "1.2", "label": "字段含义与质量问题清单"},
+    {"from": "1.2", "to": "2.1", "label": "清洗后订单行"},
+    {"from": "1.2", "to": "3.1", "label": "清洗后订单行"},
+    {"from": "2.1", "to": "4.1", "label": "季节性判断：季节系数作为特征"},
+    {"from": "3.1", "to": "4.1", "label": "SKU×月面板与切分"},
+    {"from": "4.1", "to": "6.1", "label": "上月值、近 3 / 6 月均值"},
+    {"from": "4.1", "to": "7.1", "label": "特征"},
+    {"from": "6.1", "to": "7.1", "label": "基线误差：模型必须超过的线"},
+    {"from": "7.1", "to": "11.1", "label": "模型 sku_demand_linear"}
+  ],
+  "back_edges": [],
+  "revision_loops": [],
+  "groups": {},
+  "notes": "演示项目：scripts/run_all.py 从原始数据一路跑到交付清单。各步执行完毕、等你验收；模型 sku_demand_linear 登记为候选，验收与交付由你在平台上确认。"
+}

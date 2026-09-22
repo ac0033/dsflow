@@ -1,0 +1,456 @@
+{
+  "$defs": {
+    "GuideBrief": {
+      "additionalProperties": true,
+      "description": "开头六段：背景、目的、结论、操作、结果、下一步建议。写给只看这一屏就要判断能不能往下走的人。",
+      "properties": {
+        "background": {
+          "default": "",
+          "description": "背景：为什么要有这一步，和上一步是什么关系，一句",
+          "title": "Background",
+          "type": "string"
+        },
+        "question": {
+          "description": "目的：这一步要回答什么，用业务的话说，一句",
+          "title": "Question",
+          "type": "string"
+        },
+        "answer": {
+          "description": "结论：回答上面那个问题，一句。最多带一个数字",
+          "title": "Answer",
+          "type": "string"
+        },
+        "can_continue": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "能不能往下走",
+          "title": "Can Continue"
+        },
+        "did": {
+          "default": "",
+          "description": "操作：做了什么，一句白话，不写数字",
+          "title": "Did",
+          "type": "string"
+        },
+        "result": {
+          "default": "",
+          "description": "结果：这些操作做完实现了什么、留下了哪些核心产出（写产物名与它现在能干什么，和目的、操作对得上）",
+          "title": "Result",
+          "type": "string"
+        },
+        "next": {
+          "default": "",
+          "description": "下一步建议：接下来该做什么、可以不做什么",
+          "title": "Next",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "answer"
+      ],
+      "title": "GuideBrief",
+      "type": "object"
+    },
+    "GuideCell": {
+      "additionalProperties": true,
+      "description": "一个（或几个）单元格的旁注：在做什么、为什么这样做、输出怎么读。",
+      "properties": {
+        "cell": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "items": {
+                "type": "integer"
+              },
+              "type": "array"
+            }
+          ],
+          "description": "notebook 里第几个单元格（从 1 数，说明单元格也算）",
+          "title": "Cell"
+        },
+        "notebook": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "不用本部分默认 notebook 时写",
+          "title": "Notebook"
+        },
+        "title": {
+          "default": "",
+          "title": "Title",
+          "type": "string"
+        },
+        "what": {
+          "default": "",
+          "description": "在做什么",
+          "title": "What",
+          "type": "string"
+        },
+        "why": {
+          "default": "",
+          "description": "为什么这样做：防的是什么风险、少了会怎样",
+          "title": "Why",
+          "type": "string"
+        },
+        "read": {
+          "default": "",
+          "description": "输出怎么读：指着具体的输出数字说它意味着什么",
+          "title": "Read",
+          "type": "string"
+        },
+        "lines": {
+          "default": [],
+          "description": "只给不容易看懂的行加注，一格最多三条",
+          "items": {
+            "$ref": "#/$defs/GuideLine"
+          },
+          "title": "Lines",
+          "type": "array"
+        },
+        "data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GuideData"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "核心的格子才配数据视图，让人对照源数据看"
+        }
+      },
+      "required": [
+        "cell"
+      ],
+      "title": "GuideCell",
+      "type": "object"
+    },
+    "GuideData": {
+      "additionalProperties": true,
+      "description": "挂在某一格旁边的数据视图：用这份数据的几行几列，让人对照着看这格代码做了什么。\n\n一屏就是静态对照；两屏（处理前 / 处理后）平台会给切换按钮，切换时带变化动画。",
+      "properties": {
+        "title": {
+          "default": "",
+          "description": "这个数据视图在给人看什么",
+          "title": "Title",
+          "type": "string"
+        },
+        "frames": {
+          "description": "1～2 屏",
+          "items": {
+            "$ref": "#/$defs/GuideFrame"
+          },
+          "title": "Frames",
+          "type": "array"
+        },
+        "note": {
+          "default": "",
+          "description": "一句提醒，如“只读了表头，没把整表读进内存”",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "frames"
+      ],
+      "title": "GuideData",
+      "type": "object"
+    },
+    "GuideFrame": {
+      "additionalProperties": true,
+      "description": "数据视图的一屏：一份数据文件的前几行、只取几列。平台按需读，不整表转换。",
+      "properties": {
+        "label": {
+          "description": "这一屏是什么，如 处理前 / 处理后",
+          "title": "Label",
+          "type": "string"
+        },
+        "file": {
+          "description": "数据文件路径，相对项目根目录；xlsx / csv / parquet",
+          "title": "File",
+          "type": "string"
+        },
+        "columns": {
+          "default": [],
+          "description": "只看这几列；不写就取前几列",
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "limit": {
+          "default": 5,
+          "description": "取前几行",
+          "maximum": 20,
+          "minimum": 1,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "sheet": {
+          "default": 0,
+          "description": "xlsx 的第几个工作表，从 0 起",
+          "title": "Sheet",
+          "type": "integer"
+        },
+        "mark": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GuideMark"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "caption": {
+          "default": "",
+          "description": "这一屏底下的一句说明",
+          "title": "Caption",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "file"
+      ],
+      "title": "GuideFrame",
+      "type": "object"
+    },
+    "GuideLine": {
+      "additionalProperties": true,
+      "properties": {
+        "line": {
+          "description": "单元格内第几行（从 1 数）",
+          "minimum": 1,
+          "title": "Line",
+          "type": "integer"
+        },
+        "note": {
+          "title": "Note",
+          "type": "string"
+        },
+        "cell": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "一条讲解引用多个单元格时，指明是哪个",
+          "title": "Cell"
+        },
+        "mark": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GuideMark"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "点这一行时，数据视图里跟着亮起来的列或行"
+        }
+      },
+      "required": [
+        "line",
+        "note"
+      ],
+      "title": "GuideLine",
+      "type": "object"
+    },
+    "GuideMark": {
+      "additionalProperties": true,
+      "description": "数据视图里要点出来的地方：哪几列、哪几行（行按 0 起算，指这一屏里的第几行）。",
+      "properties": {
+        "columns": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Columns",
+          "type": "array"
+        },
+        "rows": {
+          "default": [],
+          "items": {
+            "type": "integer"
+          },
+          "title": "Rows",
+          "type": "array"
+        },
+        "note": {
+          "default": "",
+          "description": "点出来之后要说的一句话",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "title": "GuideMark",
+      "type": "object"
+    },
+    "GuidePart": {
+      "additionalProperties": true,
+      "properties": {
+        "question": {
+          "description": "读者要弄明白的一个问题",
+          "title": "Question",
+          "type": "string"
+        },
+        "answer": {
+          "default": "",
+          "title": "Answer",
+          "type": "string"
+        },
+        "meaning": {
+          "default": "",
+          "description": "业务含义：这一段的结论对业务意味着什么",
+          "title": "Meaning",
+          "type": "string"
+        },
+        "notebook": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Notebook"
+        },
+        "cells": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/GuideCell"
+          },
+          "title": "Cells",
+          "type": "array"
+        }
+      },
+      "required": [
+        "question"
+      ],
+      "title": "GuidePart",
+      "type": "object"
+    },
+    "GuideTerm": {
+      "additionalProperties": true,
+      "properties": {
+        "term": {
+          "title": "Term",
+          "type": "string"
+        },
+        "plain": {
+          "description": "白话解释（本步特有的说法；通用词平台内置了术语表）",
+          "title": "Plain",
+          "type": "string"
+        },
+        "aliases": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Aliases",
+          "type": "array"
+        }
+      },
+      "required": [
+        "term",
+        "plain"
+      ],
+      "title": "GuideTerm",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "notebook 导读：写给懂业务、懂技术原理、能读代码，但没做过数据科学的负责人。\n\n只讲 notebook 里真实的单元格和输出，不复述用户报告；数字照输出原样写，平台会逐个回到输出里核对。",
+  "properties": {
+    "step": {
+      "title": "Step",
+      "type": "string"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "notebook": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "主 notebook，相对本轮目录；不写时取本轮第一个 notebook",
+      "title": "Notebook"
+    },
+    "brief": {
+      "$ref": "#/$defs/GuideBrief"
+    },
+    "parts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GuidePart"
+      },
+      "title": "Parts",
+      "type": "array"
+    },
+    "terms": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/GuideTerm"
+      },
+      "title": "Terms",
+      "type": "array"
+    },
+    "cannot_say": {
+      "default": [],
+      "description": "别误读：这一步没有证明什么",
+      "items": {
+        "type": "string"
+      },
+      "title": "Cannot Say",
+      "type": "array"
+    }
+  },
+  "required": [
+    "step",
+    "brief"
+  ],
+  "title": "Guide",
+  "type": "object"
+}

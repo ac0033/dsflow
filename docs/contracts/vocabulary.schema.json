@@ -1,0 +1,51 @@
+{
+  "$defs": {
+    "VocabTerm": {
+      "additionalProperties": true,
+      "properties": {
+        "term": {
+          "title": "Term",
+          "type": "string"
+        },
+        "meaning": {
+          "title": "Meaning",
+          "type": "string"
+        },
+        "source": {
+          "description": "出处：数据表字段、表名或既有对话",
+          "title": "Source",
+          "type": "string"
+        },
+        "avoid": {
+          "default": [],
+          "description": "不要使用的同义说法",
+          "items": {
+            "type": "string"
+          },
+          "title": "Avoid",
+          "type": "array"
+        }
+      },
+      "required": [
+        "term",
+        "meaning",
+        "source"
+      ],
+      "title": "VocabTerm",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "terms": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/VocabTerm"
+      },
+      "title": "Terms",
+      "type": "array"
+    }
+  },
+  "title": "Vocabulary",
+  "type": "object"
+}

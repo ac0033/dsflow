@@ -1,0 +1,522 @@
+/* notebook 导读：左边是 notebook 里真实的单元格，右边是旁注（做什么 / 为什么 / 输出怎么读） */
+.guide {
+  font-size: 14px;
+}
+.guide-brief {
+  border: 1px solid #bfdbfe;
+  background: linear-gradient(180deg, #f5f9ff, #fff);
+  border-radius: 14px;
+  padding: 14px 18px;
+}
+.guide-brief.is-raw {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+.guide-brief .raw-flag {
+  font-size: 12px;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-bottom: 10px;
+}
+.guide-brief .line {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  padding: 5px 0;
+}
+.guide-brief .line + .line {
+  border-top: 1px dashed #dbeafe;
+}
+.guide-brief dt {
+  font-size: 12px;
+  color: #64748b;
+  letter-spacing: 0.04em;
+}
+.guide-brief dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #334155;
+}
+.guide-brief .line:first-child dd {
+  font-size: 13px;
+  color: #64748b;
+}
+.guide-brief dd.a {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.6;
+  color: #0f172a;
+}
+.guide-brief dd.a > span:first-child {
+  margin-right: 8px;
+  vertical-align: 2px;
+}
+
+.guide-part {
+  margin-top: 22px;
+}
+.guide-part > h2 {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.5;
+  margin: 0 0 4px;
+}
+.guide-part > h2 .no {
+  display: inline-grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  margin-right: 8px;
+  padding: 0 6px;
+  border-radius: 7px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 12px;
+  vertical-align: 2px;
+}
+
+.guide-row {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0;
+  align-items: start;
+}
+@media (min-width: 1100px) {
+  .guide-row {
+    grid-template-columns: minmax(0, 1fr) 21rem;
+  }
+}
+.guide-note {
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #2563eb;
+  background: #fff;
+  border-radius: 0 10px 10px 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.75;
+}
+.guide-note dt {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #2563eb;
+  margin-top: 8px;
+}
+.guide-note dt:first-of-type {
+  margin-top: 0;
+}
+.guide-note dd {
+  color: #1e293b;
+  margin: 1px 0 0;
+}
+.guide-note .lines {
+  margin-top: 9px;
+  border-top: 1px dashed #e2e8f0;
+  padding-top: 7px;
+  font-size: 12.5px;
+  color: #334155;
+}
+.guide-note .lines li {
+  display: flex;
+  gap: 6px;
+  margin-top: 4px;
+  line-height: 1.65;
+}
+
+.guide-cell {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+/* 从答疑或列的说明跳过来时，先把那一格框出来两秒 */
+.guide-cell.is-target {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #dbeafe;
+}
+.guide-cell > figcaption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #64748b;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+.guide-cell .body {
+  padding: 8px 10px;
+}
+
+/* 代码：左边行号，被注解的行显示 ①②③ */
+.nb-code {
+  display: flex;
+  background: #fbfcfd;
+  border-radius: 8px;
+  border: 1px solid #eef2f7;
+  overflow: hidden;
+}
+.nb-code .gutter {
+  flex: none;
+  padding: 10px 6px 10px 8px;
+  text-align: right;
+  background: #f8fafc;
+  border-right: 1px solid #eef2f7;
+  user-select: none;
+}
+.nb-code .gutter span,
+.nb-code .gutter button,
+.nb-code pre {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.nb-code .gutter span,
+.nb-code .gutter button {
+  display: block;
+  width: 100%;
+  text-align: right;
+  color: #cbd5e1;
+}
+.nb-code .gutter .on {
+  color: #2563eb;
+  font-weight: 700;
+}
+.nb-code pre {
+  margin: 0;
+  padding: 10px 12px;
+  overflow-x: auto;
+  flex: 1;
+  min-width: 0;
+}
+.mark {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 10.5px;
+  line-height: 1;
+}
+
+/* ---------- 数据视图：这一格真正在处理的那几行几列 ---------- */
+.guide-data {
+  border: 1px solid #dbeafe;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+.guide-data > figcaption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  background: #eff6ff;
+  border-bottom: 1px solid #dbeafe;
+  font-size: 11.5px;
+  color: #1e40af;
+}
+.guide-data > figcaption .t {
+  font-weight: 600;
+}
+.guide-data .switch {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: #fff;
+  border: 1px solid #bfdbfe;
+  border-radius: 999px;
+  padding: 1px;
+}
+.guide-data .switch button {
+  border-radius: 999px;
+  padding: 1px 9px;
+  font-size: 11px;
+  color: #475569;
+}
+.guide-data .switch button.on {
+  background: #2563eb;
+  color: #fff;
+}
+.guide-data .switch button.go {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  color: #2563eb;
+}
+.guide-data .switch button.go:hover {
+  background: #dbeafe;
+}
+.guide-data .body {
+  padding: 8px 10px;
+}
+.guide-data .scroll {
+  overflow-x: auto;
+}
+.guide-data .hint,
+.guide-data .cap,
+.guide-data .mark-note {
+  font-size: 12px;
+  line-height: 1.7;
+}
+.guide-data .hint {
+  color: #94a3b8;
+}
+.guide-data .cap {
+  color: #64748b;
+  margin-top: 6px;
+}
+.guide-data .mark-note {
+  margin-top: 6px;
+  color: #1e40af;
+  background: #eff6ff;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+.guide-data .bad {
+  font-size: 12px;
+  color: #b91c1c;
+}
+.guide-data > footer {
+  display: flex;
+  gap: 10px;
+  padding: 3px 10px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 10.5px;
+  color: #94a3b8;
+}
+
+table.peek {
+  border-collapse: collapse;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  animation: peek-in 0.25s ease-out;
+}
+@keyframes peek-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+table.peek th,
+table.peek td {
+  border: 1px solid #eef2f7;
+  padding: 3px 8px;
+  text-align: left;
+  max-width: 17rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: background-color 0.25s ease;
+}
+table.peek th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+}
+table.peek .no {
+  background: #f8fafc;
+  color: #cbd5e1;
+  text-align: right;
+  padding: 3px 6px;
+}
+table.peek th.lit {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+table.peek td.lit {
+  background: #eff6ff;
+}
+table.peek tr.lit td {
+  box-shadow: inset 0 0 0 9999px #fef9c3;
+}
+table.peek td.changed {
+  animation: peek-changed 1.1s ease-out;
+  font-weight: 600;
+  color: #0f172a;
+}
+@keyframes peek-changed {
+  0%,
+  45% {
+    background: #fde68a;
+  }
+  100% {
+    background: transparent;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  table.peek,
+  table.peek td.changed {
+    animation: none;
+  }
+}
+
+/* 代码行号上的 ①②③ 可以点，点了数据视图跟着亮 */
+.nb-code .gutter .pick {
+  cursor: pointer;
+  border-radius: 4px;
+}
+.nb-code .gutter .pick:hover {
+  background: #dbeafe;
+}
+.nb-code .gutter .pick.picked {
+  background: #2563eb;
+  color: #fff;
+}
+.guide-note .lines li.on {
+  background: #eff6ff;
+  border-radius: 6px;
+}
+.guide-note .lines .tie {
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px dashed #93c5fd;
+}
+.guide-note .tie-hint {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.6;
+}
+
+/* ---------- 讲解开头下面的数据主线：这一步把哪张表变成了哪张表，点一下整张打开 ---------- */
+.guide-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 7px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 12.5px;
+  color: #475569;
+}
+.guide-strip .k {
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+}
+.guide-strip .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  color: #1e293b;
+  cursor: pointer;
+}
+.guide-strip .chip:hover {
+  border-color: #60a5fa;
+  background: #eff6ff;
+}
+.guide-strip .chip.out {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+.guide-strip .chip.out:hover {
+  background: #1d4ed8;
+}
+.guide-strip .chip.upd {
+  background: #fbbf24;
+  border-color: #fbbf24;
+  color: #451a03;
+}
+.guide-strip .chip.gone {
+  color: #94a3b8;
+  text-decoration: line-through;
+  border-style: dashed;
+}
+.guide-strip .chip .d {
+  font-size: 10.5px;
+  opacity: 0.8;
+}
+.guide-strip .go {
+  margin-left: auto;
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+/* 讲解的段落目录：几个读者问题一眼看全，点一个跳过去 */
+.guide-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+.guide-toc button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 4px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12.5px;
+  color: #1e3a8a;
+  cursor: pointer;
+}
+.guide-toc button:hover {
+  background: #eff6ff;
+}
+.guide-toc .no {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 11px;
+}
+.guide-part:target {
+  scroll-margin-top: 12px;
+}
+
+/* 长代码折叠：没讲到的行折成一行，点开看全部 */
+.nb-code .gutter .fold {
+  display: block;
+  width: 100%;
+  text-align: right;
+  color: #94a3b8;
+  cursor: pointer;
+}
+.nb-code .fold-gap {
+  display: inline-block;
+  color: #94a3b8;
+  font-style: italic;
+  cursor: pointer;
+  border-bottom: 1px dashed #cbd5e1;
+}
+.nb-code .fold-gap:hover,
+.nb-code .gutter .fold:hover {
+  color: #2563eb;
+}
+.guide-cell .fold-toggle {
+  font-size: 11px;
+  color: #2563eb;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.guide-data > footer .open {
+  color: #2563eb;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

@@ -1,0 +1,109 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "version": {
+      "description": "内容 SHA256 前 12 位",
+      "title": "Version",
+      "type": "string"
+    },
+    "sha256": {
+      "title": "Sha256",
+      "type": "string"
+    },
+    "path": {
+      "title": "Path",
+      "type": "string"
+    },
+    "format": {
+      "enum": [
+        "csv",
+        "xlsx",
+        "parquet",
+        "other"
+      ],
+      "title": "Format",
+      "type": "string"
+    },
+    "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "rows": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rows"
+    },
+    "columns": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Columns"
+    },
+    "stage": {
+      "default": "raw",
+      "title": "Stage",
+      "type": "string"
+    },
+    "produced_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Produced By"
+    },
+    "parents": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Parents",
+      "type": "array"
+    },
+    "replaces": {
+      "default": [],
+      "description": "这一版登记后，哪些数据集就不再是有用的最终文件了（被它替代，退出存量）",
+      "items": {
+        "type": "string"
+      },
+      "title": "Replaces",
+      "type": "array"
+    },
+    "registered_at": {
+      "title": "Registered At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "version",
+    "sha256",
+    "path",
+    "format",
+    "size_bytes",
+    "registered_at"
+  ],
+  "title": "DatasetVersion",
+  "type": "object"
+}

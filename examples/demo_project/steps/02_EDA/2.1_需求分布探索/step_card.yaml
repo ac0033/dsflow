@@ -1,0 +1,43 @@
+step: "2.1"
+headline: 三个类目都有季节性，高峰月各不相同：电力物资 12 月（季节系数 1.4864）、MRO工业品 10 月（1.3070）、办公通用物资 3 月（1.1769）；季节系数值得作为特征，可以继续
+can_continue: true
+core_numbers:
+  - label: 电力物资 12 月季节系数
+    after: 1.4864
+    scope: 12 月平均月需求量 ÷ 全部 24 个月的平均月需求量（退货行不计入）
+    source: "outputs/seasonality.csv#sql:SELECT 季节系数 FROM data WHERE 类目 = '电力物资' AND 月 = 12"
+  - label: MRO工业品 10 月季节系数
+    after: 1.3070
+    scope: 同上
+    source: "outputs/seasonality.csv#sql:SELECT 季节系数 FROM data WHERE 类目 = 'MRO工业品' AND 月 = 10"
+  - label: 办公通用物资 3 月季节系数
+    after: 1.1769
+    scope: 同上
+    source: "outputs/seasonality.csv#sql:SELECT 季节系数 FROM data WHERE 类目 = '办公通用物资' AND 月 = 3"
+  - label: 需求量合计
+    after: 547214
+    scope: 三个类目 24 个月的需求量合计，与 1.2 非退货订单行的数量合计相等
+    source: "outputs/monthly_by_category.csv#sum:需求量"
+operation: 确定需求量口径（某月某 SKU 的正数量合计，退货行不计入）；按类目 × 月份汇总；计算每个类目 12 个自然月的季节系数。
+exceptions: []
+artifacts:
+  - {path: outputs/monthly_by_category.csv, purpose: 各类目月度需求量, kind: table}
+  - {path: outputs/seasonality.csv, purpose: 各类目 12 个自然月的季节系数, kind: table}
+why: 如果需求量有季节性，只看最近几个月会在高峰前低估、高峰后高估；看清高峰在哪，才知道要不要加季节特征。
+invariants:
+  - 各类目月度需求量合计 = 1.2 非退货订单行的数量合计（547,214）
+concentration: 季节性最强的是电力物资：11 月 1.3121、12 月 1.4864；3 月、9 月只有 0.79 左右
+can_say:
+  - 电力物资 11–12 月的需求量明显高于全年平均
+  - 三个类目的高峰月份不同，季节系数要按类目分别估计
+cannot_say:
+  - 每个自然月只有 2 个观测（24 个月），还不能说这个季节形状每年都会重复
+  - 这里的季节系数用了全部 24 个月，只用于探索；建模时 4.1 只用训练期重新估计
+next: 4.1 用训练期估计同类目季节系数，做季节调整特征
+examples:
+  - title: 电力物资的高峰
+    input: seasonality.csv 中电力物资 11 月、12 月的季节系数 1.3121、1.4864，其余月份 0.79～1.03
+    rule: 季节系数 = 该月平均月需求量 ÷ 所有月份平均月需求量
+    output: 电力物资 12 月的平均月需求量约是全年平均的 1.49 倍
+    artifact: outputs/seasonality.csv
+    real: true

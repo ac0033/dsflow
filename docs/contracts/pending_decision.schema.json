@@ -1,0 +1,88 @@
+{
+  "additionalProperties": true,
+  "description": "待决事项：需要用户裁定的业务口径或方向，是否阻塞后续执行。",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "question": {
+      "title": "Question",
+      "type": "string"
+    },
+    "recommendation": {
+      "default": "",
+      "title": "Recommendation",
+      "type": "string"
+    },
+    "basis": {
+      "default": "",
+      "title": "Basis",
+      "type": "string"
+    },
+    "alternatives": {
+      "default": "",
+      "title": "Alternatives",
+      "type": "string"
+    },
+    "impact": {
+      "default": "",
+      "title": "Impact",
+      "type": "string"
+    },
+    "blocking": {
+      "default": false,
+      "title": "Blocking",
+      "type": "boolean"
+    },
+    "status": {
+      "default": "unresolved",
+      "enum": [
+        "unresolved",
+        "resolved"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "resolved_answer": {
+      "default": "",
+      "title": "Resolved Answer",
+      "type": "string"
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step"
+    },
+    "created_at": {
+      "default": "",
+      "title": "Created At",
+      "type": "string"
+    },
+    "resolved_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resolved At"
+    }
+  },
+  "required": [
+    "id",
+    "question"
+  ],
+  "title": "PendingDecision",
+  "type": "object"
+}

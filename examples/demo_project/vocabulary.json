@@ -1,0 +1,17 @@
+{
+  "terms": [
+    {"term": "订单行", "meaning": "订单明细中的一行，即一个订单号下的一个 SKU", "source": "orders.csv 的行粒度"},
+    {"term": "SKU", "meaning": "商城中的最小销售单元编码", "source": "orders.csv 字段 SKU"},
+    {"term": "类目", "meaning": "商品所属大类：办公通用物资、MRO 工业品、电力物资", "source": "orders.csv 字段 类目"},
+    {"term": "需求量", "meaning": "某月某 SKU 的正数量合计（退货行不计入）", "source": "项目业务问题；口径在 2.1 确定"},
+    {"term": "退货行", "meaning": "数量为负的订单行", "source": "orders.csv 字段 数量；1.2 标记为 是否退货"},
+    {"term": "金额未知", "meaning": "金额为空的订单行，只标记不删除", "source": "orders.csv 字段 金额；1.2 标记"},
+    {"term": "季节系数", "meaning": "某类目某自然月的平均月需求量 ÷ 该类目所有月份的平均月需求量", "source": "2.1 产物 seasonality.csv"},
+    {"term": "训练期", "meaning": "2024-07 至 2025-12", "source": "3.1 切分", "avoid": ["训练集月份"]},
+    {"term": "验证期", "meaning": "2026-01 至 2026-03，用来比较方法与特征", "source": "3.1 切分"},
+    {"term": "最终评估期", "meaning": "2026-04 至 2026-06，只在最终模型上评估一次", "source": "3.1 切分", "avoid": ["测试集"]},
+    {"term": "基线", "meaning": "不用训练的预测方法：上月值、近 3 月均值、近 6 月均值", "source": "6.1"},
+    {"term": "MAE", "meaning": "平均绝对误差：每个 SKU 月的 |实际需求量 − 预测需求量| 的平均", "source": "6.1、7.1 的评估指标"},
+    {"term": "提前备货", "meaning": "预测需求量明显高于近 3 月均值、需要提前准备库存的 SKU", "source": "项目业务问题；规则见 11.1"}
+  ]
+}

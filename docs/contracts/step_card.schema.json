@@ -1,0 +1,305 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "purpose": {
+          "description": "这个产物是干什么用的",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "kind": {
+          "default": "other",
+          "enum": [
+            "table",
+            "figure",
+            "model",
+            "report",
+            "log",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "purpose"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "CoreNumber": {
+      "additionalProperties": true,
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "before": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Before"
+        },
+        "change": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Change"
+        },
+        "after": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "After"
+        },
+        "unit": {
+          "default": "",
+          "title": "Unit",
+          "type": "string"
+        },
+        "scope": {
+          "default": "",
+          "description": "口径：记录数还是不同值个数、期间、范围",
+          "title": "Scope",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "可重算的出处，用来核对「处理后」的数字：<产物路径>#<取值方式>。路径相对本轮目录；取值方式：rows | sum:列 | count:列 | distinct:列 | mean:列 | min:列 | max:列 | sql:查询（表名 data）| /JSON/指针",
+          "title": "Source"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "CoreNumber",
+      "type": "object"
+    },
+    "Example": {
+      "additionalProperties": true,
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "input": {
+          "title": "Input",
+          "type": "string"
+        },
+        "rule": {
+          "title": "Rule",
+          "type": "string"
+        },
+        "output": {
+          "title": "Output",
+          "type": "string"
+        },
+        "artifact": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Artifact"
+        },
+        "real": {
+          "default": true,
+          "description": "False 表示虚构示意，界面必须标明",
+          "title": "Real",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "title",
+        "input",
+        "rule",
+        "output"
+      ],
+      "title": "Example",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "properties": {
+    "step": {
+      "title": "Step",
+      "type": "string"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "headline": {
+      "description": "首屏一句话：完成了吗、验收是否通过、能否继续",
+      "title": "Headline",
+      "type": "string"
+    },
+    "can_continue": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Can Continue"
+    },
+    "core_numbers": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/CoreNumber"
+      },
+      "title": "Core Numbers",
+      "type": "array"
+    },
+    "operation": {
+      "default": "",
+      "description": "用直白的话说主要操作",
+      "title": "Operation",
+      "type": "string"
+    },
+    "exceptions": {
+      "default": [],
+      "description": "只列影响判断的例外",
+      "items": {
+        "type": "string"
+      },
+      "title": "Exceptions",
+      "type": "array"
+    },
+    "artifacts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "why": {
+      "default": "",
+      "title": "Why",
+      "type": "string"
+    },
+    "invariants": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Invariants",
+      "type": "array"
+    },
+    "concentration": {
+      "default": "",
+      "description": "变化集中在哪里",
+      "title": "Concentration",
+      "type": "string"
+    },
+    "evidence": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Evidence",
+      "type": "array"
+    },
+    "can_say": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Can Say",
+      "type": "array"
+    },
+    "cannot_say": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Cannot Say",
+      "type": "array"
+    },
+    "next": {
+      "default": "",
+      "title": "Next",
+      "type": "string"
+    },
+    "examples": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/Example"
+      },
+      "title": "Examples",
+      "type": "array"
+    }
+  },
+  "required": [
+    "step",
+    "headline"
+  ],
+  "title": "StepCard",
+  "type": "object"
+}

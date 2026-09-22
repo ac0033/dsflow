@@ -1,0 +1,589 @@
+/* 答疑对话框：右侧抽屉 + 选中文字后的浮动按钮 + 钉住引文的高亮。 */
+
+.ask-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  background: #fff;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1d4ed8;
+  box-shadow: 0 6px 20px rgb(15 23 42 / 12%);
+}
+.ask-fab:hover {
+  background: #eff6ff;
+}
+.ask-fab-n {
+  border-radius: 999px;
+  background: #dbeafe;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #1e40af;
+}
+/* 还没发出去的标注：收起对话框也看得见攒了几处 */
+.ask-fab-note {
+  border-radius: 999px;
+  background: #fef3c7;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #92400e;
+}
+
+.ask-dock {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  width: min(420px, 100vw);
+  flex-direction: column;
+  border-left: 1px solid #e2e8f0;
+  background: #fff;
+  box-shadow: -8px 0 24px rgb(15 23 42 / 10%);
+}
+.ask-dock > header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.ask-where {
+  border-radius: 4px;
+  background: #f1f5f9;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #475569;
+}
+.ask-model {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 4px;
+  border: 1px solid #e2e8f0;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #64748b;
+}
+.ask-model:hover {
+  border-color: #93c5fd;
+  color: #1d4ed8;
+}
+.ask-hint {
+  border-bottom: 1px solid #fde68a;
+  background: #fffbeb;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #92400e;
+}
+
+.ask-list {
+  flex: 1;
+  overflow: auto;
+  padding: 10px 12px;
+}
+.ask-empty {
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+  padding: 14px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #64748b;
+}
+.ask-card {
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  padding: 10px;
+}
+.ask-card.is-focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px #dbeafe;
+}
+.ask-quote {
+  margin-bottom: 6px;
+  border-left: 3px solid #fbbf24;
+  background: #fffbeb;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #78350f;
+}
+.ask-q {
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.ask-a {
+  margin-top: 6px;
+  font-size: 13px;
+}
+.ask-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: #475569;
+}
+.ask-err {
+  margin-top: 6px;
+  border-radius: 6px;
+  background: #fef2f2;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: #b91c1c;
+}
+.ask-warn {
+  margin-top: 6px;
+  border-radius: 6px;
+  background: #fffbeb;
+  padding: 6px 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #92400e;
+}
+/* 答案里提到的数据文件与单元格：点一下跳过去 */
+.ask-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #64748b;
+}
+.ask-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  padding: 1px 8px;
+  color: #1d4ed8;
+}
+.ask-links a:hover {
+  background: #dbeafe;
+}
+
+.ask-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.ask-meta button {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #475569;
+}
+.ask-meta button:hover {
+  background: #f1f5f9;
+}
+.ask-meta button.is-on {
+  background: #fef3c7;
+  color: #92400e;
+}
+.ask-term {
+  margin-top: 8px;
+  display: grid;
+  gap: 6px;
+  border-radius: 8px;
+  background: #f8fafc;
+  padding: 8px;
+}
+.ask-term input {
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  padding: 4px 8px;
+  font-size: 12.5px;
+}
+.ask-term div {
+  display: flex;
+  gap: 6px;
+}
+.ask-term button {
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  padding: 2px 10px;
+  font-size: 12px;
+}
+.ask-term button[type='submit'] {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.ask-term button[type='submit']:disabled {
+  opacity: 0.5;
+}
+
+.ask-input {
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 12px 10px;
+}
+.ask-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  background: #fffbeb;
+  padding: 3px 6px;
+  font-size: 11.5px;
+  color: #78350f;
+}
+.ask-chip label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 3px;
+}
+.ask-input textarea {
+  width: 100%;
+  resize: none;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  padding: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.ask-input textarea:focus {
+  border-color: #60a5fa;
+  outline: none;
+}
+.ask-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 11.5px;
+  color: #64748b;
+}
+.ask-actions label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.ask-actions button {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  background: #2563eb;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  color: #fff;
+}
+.ask-actions button:disabled {
+  background: #94a3b8;
+}
+
+/* 一条问答带的几处标注（正在回答的那张卡和存档的卡共用） */
+.ask-notes,
+.ask-pending ul {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.ask-notes li,
+.ask-pending li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  border-left: 3px solid #93c5fd;
+  background: #eff6ff;
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #1e3a8a;
+}
+.ask-notes .i,
+.ask-pending .i {
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: #bfdbfe;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #1e40af;
+}
+.ask-notes .q,
+.ask-pending .q {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ask-notes .n,
+.ask-pending .n {
+  display: block;
+  color: #475569;
+}
+
+/* 输入框上方：攒着还没发出去的几处标注 */
+.ask-pending {
+  margin-bottom: 6px;
+  border-radius: 8px;
+  border: 1px dashed #93c5fd;
+  padding: 6px;
+}
+.ask-pending-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  font-size: 11.5px;
+  color: #1d4ed8;
+}
+.ask-pending ul {
+  margin-bottom: 0;
+}
+.ask-pending li button {
+  flex-shrink: 0;
+  color: #64748b;
+}
+.ask-pending li button:hover {
+  color: #b91c1c;
+}
+
+/* 选中文字后浮出来的两个按钮；点「标注」就地换成写备注的小表单 */
+.ask-pop {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  gap: 2px;
+  transform: translate(-50%, -125%);
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  padding: 3px;
+  box-shadow: 0 6px 18px rgb(15 23 42 / 16%);
+}
+.ask-pop.is-note {
+  width: 300px;
+  transform: translate(-50%, -104%);
+  padding: 8px;
+}
+.ask-note-form {
+  width: 100%;
+}
+.ask-note-quote {
+  overflow: hidden;
+  margin-bottom: 6px;
+  border-left: 3px solid #fbbf24;
+  background: #fffbeb;
+  padding: 3px 6px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #78350f;
+}
+.ask-note-form textarea {
+  width: 100%;
+  resize: none;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  padding: 5px 7px;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.ask-note-form textarea:focus {
+  border-color: #60a5fa;
+  outline: none;
+}
+.ask-note-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #94a3b8;
+}
+.ask-note-row span {
+  min-width: 0;
+  flex: 1;
+  line-height: 1.5;
+}
+.ask-note-row button {
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: #475569;
+}
+.ask-note-row button.go {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.ask-pop button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 12px;
+  color: #1d4ed8;
+}
+.ask-pop button:hover {
+  background: #eff6ff;
+}
+
+/* 钉住的引文：用浏览器的自定义高亮画，不动 DOM */
+::highlight(dsflow-ask) {
+  background: #fde68a;
+  color: #451a03;
+}
+/* 还没发出去的标注：换一个颜色，和问过的分得开 */
+::highlight(dsflow-note) {
+  background: #bfdbfe;
+  color: #172554;
+}
+
+/* 模型配置：选一家、粘密钥、保存并连接 */
+.ask-setup {
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 10px 12px 12px;
+  font-size: 12.5px;
+}
+.ask-setup h3 {
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0f172a;
+}
+.ask-setup .note {
+  margin-bottom: 6px;
+  line-height: 1.7;
+  color: #64748b;
+}
+.ask-setup .note code {
+  word-break: break-all;
+  border-radius: 3px;
+  background: #e2e8f0;
+  padding: 0 3px;
+  font-size: 11px;
+}
+.ask-setup label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ask-setup label > span {
+  width: 4.5rem;
+  flex-shrink: 0;
+  color: #475569;
+}
+.ask-setup select,
+.ask-setup input {
+  min-width: 0;
+  flex: 1;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 4px 8px;
+  font-size: 12.5px;
+}
+.ask-setup .more {
+  margin-bottom: 6px;
+  color: #2563eb;
+  text-decoration: underline;
+}
+.ask-setup .row {
+  display: flex;
+  gap: 8px;
+}
+.ask-setup .row button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 4px 12px;
+}
+.ask-setup .row button.go {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}
+.ask-setup .row button:disabled {
+  opacity: 0.55;
+}
+.ask-setup .ok,
+.ask-setup .bad {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 8px;
+  border-radius: 6px;
+  padding: 6px 8px;
+  line-height: 1.7;
+}
+.ask-setup .ok {
+  background: #ecfdf5;
+  color: #065f46;
+}
+.ask-setup .bad {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.ask-setup .saved {
+  margin-top: 8px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 6px;
+}
+.ask-setup .saved li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  color: #334155;
+}
+.ask-setup .saved button {
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  padding: 0 6px;
+  font-size: 11px;
+}
+.ask-setup .tag {
+  border-radius: 4px;
+  background: #dbeafe;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #1e40af;
+}
+.ask-setup .ok .done {
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 1px solid #065f46;
+  padding: 0 8px;
+  color: #065f46;
+}

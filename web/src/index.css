@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+
+/* 图表色（dataviz 参考调色板，已用校验脚本验证）：A/B 两版 = 系列 1/2；增减 = 发散色两极 */
+:root {
+  --viz-surface: #fcfcfb;
+  --viz-series-1: #2a78d6;
+  --viz-series-2: #eb6834;
+  --viz-grid: #e1e0d9;
+  --viz-axis: #c3c2b7;
+  --viz-muted: #898781;
+  --viz-ink-2: #52514e;
+  --viz-track: #cde2fb;
+  --viz-pos: #2a78d6;
+  --viz-neg: #e34948;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes indeterminate {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(250%); }
+}
+
+body {
+  @apply bg-slate-50 text-slate-800 antialiased;
+}

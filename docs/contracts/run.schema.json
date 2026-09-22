@@ -1,0 +1,406 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "purpose": {
+          "description": "这个产物是干什么用的",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "kind": {
+          "default": "other",
+          "enum": [
+            "table",
+            "figure",
+            "model",
+            "report",
+            "log",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "purpose"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "DatasetRef": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "rows": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rows"
+        },
+        "columns": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Columns"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "path"
+      ],
+      "title": "DatasetRef",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "一次运行：用了什么数据、什么代码、什么参数、为了验证什么假设、结论是什么。",
+  "properties": {
+    "run_id": {
+      "title": "Run Id",
+      "type": "string"
+    },
+    "step": {
+      "title": "Step",
+      "type": "string"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "command": {
+      "default": "",
+      "title": "Command",
+      "type": "string"
+    },
+    "argv": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Argv",
+      "type": "array"
+    },
+    "cwd": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Cwd"
+    },
+    "source": {
+      "default": "sdk",
+      "enum": [
+        "cli",
+        "sdk",
+        "ui",
+        "tool"
+      ],
+      "title": "Source",
+      "type": "string"
+    },
+    "rerun_of": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rerun Of"
+    },
+    "pid": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pid"
+    },
+    "started_at": {
+      "title": "Started At",
+      "type": "string"
+    },
+    "ended_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Ended At"
+    },
+    "duration_s": {
+      "anyOf": [
+        {
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration S"
+    },
+    "status": {
+      "default": "running",
+      "enum": [
+        "running",
+        "succeeded",
+        "failed"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "exit_code": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Exit Code"
+    },
+    "error": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error"
+    },
+    "git_commit": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Git Commit"
+    },
+    "git_dirty": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Git Dirty"
+    },
+    "env": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "default": {},
+      "title": "Env",
+      "type": "object"
+    },
+    "params": {
+      "additionalProperties": true,
+      "default": {},
+      "title": "Params",
+      "type": "object"
+    },
+    "metrics": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "default": {},
+      "title": "Metrics",
+      "type": "object"
+    },
+    "fold_metrics": {
+      "additionalProperties": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": "object"
+      },
+      "default": {},
+      "description": "逐折指标：{折: {指标: 值}}",
+      "title": "Fold Metrics",
+      "type": "object"
+    },
+    "hypothesis": {
+      "default": "",
+      "title": "Hypothesis",
+      "type": "string"
+    },
+    "conclusion": {
+      "default": "",
+      "title": "Conclusion",
+      "type": "string"
+    },
+    "validity": {
+      "anyOf": [
+        {
+          "enum": [
+            "有效",
+            "无效",
+            "无结论"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Validity"
+    },
+    "inputs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DatasetRef"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "outputs": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/DatasetRef"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "artifacts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "figures": {
+      "default": [],
+      "items": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object"
+      },
+      "title": "Figures",
+      "type": "array"
+    },
+    "deltas": {
+      "default": [],
+      "description": "输出数据与每个输入的结构/行数/逐列变化摘要",
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Deltas",
+      "type": "array"
+    },
+    "models": {
+      "default": [],
+      "description": "本次运行登记的模型版本：{name, version, path}",
+      "items": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object"
+      },
+      "title": "Models",
+      "type": "array"
+    }
+  },
+  "required": [
+    "run_id",
+    "step",
+    "started_at"
+  ],
+  "title": "Run",
+  "type": "object"
+}

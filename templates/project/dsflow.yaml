@@ -1,0 +1,17 @@
+# DSFlow 项目配置。平台只读取本文件；步骤、状态、依赖都在 lifecycle/steps.json。
+name: __NAME__
+# 一句话写清本项目要帮助回答的业务问题
+question: ""
+registry: lifecycle/steps.json
+vocabulary: vocabulary.json
+# 原始数据集登记（只读，平台只记录路径与哈希），例：
+# - name: orders_raw
+#   path: data/raw/orders.csv
+#   stage: raw
+#   description: 订单明细，一行 = 一个订单行
+datasets: []
+# 讲解体检的字数阈值可以在这里覆盖（默认值见 DSFlow 的 dsflow/explain/lint.py），例：
+# guide_lint:
+#   limits: {background: 120}
+#   cell_limits: {read: 500}
+#   min_len: {read: 80}

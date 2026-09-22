@@ -1,0 +1,50 @@
+step: "11.1"
+headline: 2026-07 预测 3,000 个 SKU，需求量合计 23,077.96；按演示规则提示提前备货 42 个，但这条规则只会标出近期需求量低的 SKU，需要和业务重新定；交付清单已补齐，模型的验收与交付等你确认
+can_continue: true
+core_numbers:
+  - label: 预测 SKU
+    after: 3000
+    scope: 面板里的全部 SKU，每个一行
+    source: "outputs/forecast_2026-07.csv#rows"
+  - label: 预测需求量合计
+    after: 23077.96
+    scope: 2026-07 全部 SKU 的预测需求量之和（退货行不计入的口径）
+    source: "outputs/forecast_2026-07.csv#sum:预测需求量"
+  - label: 提示提前备货的 SKU
+    after: 42
+    scope: 预测需求量 ≥ 近 3 月均值 × 1.3 且 ≥ 10；办公通用物资 31、电力物资 6、MRO工业品 5
+    source: "outputs/forecast_2026-07.csv#sql:SELECT count(*) FROM data WHERE CAST(提前备货 AS VARCHAR) IN ('true', 'True')"
+  - label: 被标出的 SKU 近 3 月均值最高
+    after: 10.67
+    scope: 42 个提前备货 SKU 中近 3 月均值的最大值
+    source: "outputs/forecast_2026-07.csv#sql:SELECT max(近3月均值) FROM data WHERE CAST(提前备货 AS VARCHAR) IN ('true', 'True')"
+  - label: 近 3 月均值 ≥ 20 且预测低于近 3 月均值的 SKU
+    after: 135
+    scope: 近 3 月均值 ≥ 20 的 SKU 一共 135 个，全部如此
+    source: "outputs/forecast_2026-07.csv#sql:SELECT count(*) FROM data WHERE 近3月均值 >= 20 AND 预测需求量 < 近3月均值"
+operation: 用登记的模型文件 sku_demand_linear 预测 2026-07 各 SKU 的需求量；按规则标出提前备货的 SKU；补写交付清单的判断部分。
+exceptions:
+  - 提前备货规则（预测需求量 ≥ 近 3 月均值 × 1.3 且 ≥ 10）是演示用规则，没有经过业务确认
+  - 这条规则只会标出近期需求量低的 SKU：模型把近期需求量高的 SKU 往回拉（7.1），近 3 月均值 ≥ 20 的 135 个 SKU 预测全部低于近 3 月均值，达不到 × 1.3；被标出的 42 个 SKU 近 3 月均值最高只有 10.67
+artifacts:
+  - {path: outputs/forecast_2026-07.csv, purpose: 2026-07 各 SKU 预测需求量与提前备货标记, kind: table}
+  - {path: nb_11.1.ipynb, purpose: 使用入口：用模型文件出下个月预测, kind: other}
+why: 交付不是只交一个模型文件：要说清怎么用、能用在哪、不能用在哪、上线后看什么，以及怎样复现。
+can_say:
+  - 2026-07 各 SKU 的预测需求量在 forecast_2026-07.csv，可以直接按类目汇总
+cannot_say:
+  - 还不能说被标出的 42 个 SKU 就是最该备货的：规则未经业务确认，而且天然偏向近期需求量低的 SKU
+next: 你在「模型与交付」页确认验收与交付；和业务一起重定提前备货规则（例如改为按预测需求量排名）；部署方式定下来之后再加推理服务
+examples:
+  - title: SKU00302 被标为提前备货
+    input: SKU00302（办公通用物资）2026-04～06 需求量 19、2、8，近 3 月均值 9.67
+    rule: 预测需求量 ≥ 近 3 月均值 × 1.3（12.57）且 ≥ 10
+    output: 预测 15.07，提前备货 = true
+    artifact: outputs/forecast_2026-07.csv
+    real: true
+  - title: SKU00786 没有被标出
+    input: SKU00786（办公通用物资）近 3 月均值 45
+    rule: 同上，要求预测 ≥ 58.5
+    output: 预测 17.21，提前备货 = false
+    artifact: outputs/forecast_2026-07.csv
+    real: true

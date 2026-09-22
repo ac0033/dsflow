@@ -1,0 +1,101 @@
+{
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step"
+    },
+    "revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Revision"
+    },
+    "run_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Run Id"
+    },
+    "severity": {
+      "default": "中",
+      "enum": [
+        "低",
+        "中",
+        "高"
+      ],
+      "title": "Severity",
+      "type": "string"
+    },
+    "blocking": {
+      "default": false,
+      "title": "Blocking",
+      "type": "boolean"
+    },
+    "status": {
+      "default": "open",
+      "enum": [
+        "open",
+        "resolved"
+      ],
+      "title": "Status",
+      "type": "string"
+    },
+    "created_at": {
+      "title": "Created At",
+      "type": "string"
+    },
+    "resolved_at": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Resolved At"
+    },
+    "note": {
+      "default": "",
+      "title": "Note",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "title",
+    "created_at"
+  ],
+  "title": "Issue",
+  "type": "object"
+}

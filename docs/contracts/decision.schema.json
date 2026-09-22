@@ -1,0 +1,73 @@
+{
+  "additionalProperties": true,
+  "description": "决策日志：背景、决策、依据、放弃的方案、影响范围。",
+  "properties": {
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "date": {
+      "title": "Date",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "context": {
+      "default": "",
+      "title": "Context",
+      "type": "string"
+    },
+    "decision": {
+      "title": "Decision",
+      "type": "string"
+    },
+    "basis": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Basis",
+      "type": "array"
+    },
+    "rejected": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Rejected",
+      "type": "array"
+    },
+    "impact": {
+      "default": "",
+      "title": "Impact",
+      "type": "string"
+    },
+    "step": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Step"
+    },
+    "created_at": {
+      "default": "",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "date",
+    "title",
+    "decision"
+  ],
+  "title": "Decision",
+  "type": "object"
+}

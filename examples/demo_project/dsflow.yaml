@@ -1,0 +1,14 @@
+# 演示项目：用模拟数据走通 DSFlow 的全流程。数据由 scripts/make_data.py 生成。
+name: 工业品商城月度需求预测（演示）
+question: 下个月各类目、各 SKU 的订单需求量大约是多少，哪些 SKU 需要提前备货？
+registry: lifecycle/steps.json
+vocabulary: vocabulary.json
+datasets:
+  - name: orders_raw
+    path: data/raw/orders.csv
+    stage: raw
+    description: 订单明细，一行 = 一个订单号下的一个 SKU
+  - name: sku_catalog
+    path: data/raw/sku_catalog.xlsx
+    stage: raw
+    description: SKU 商品目录，一行 = 一个 SKU

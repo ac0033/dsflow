@@ -1,0 +1,297 @@
+{
+  "$defs": {
+    "Applicability": {
+      "additionalProperties": true,
+      "properties": {
+        "scope": {
+          "default": [],
+          "description": "适用于什么：对象、期间、粒度",
+          "items": {
+            "type": "string"
+          },
+          "title": "Scope",
+          "type": "array"
+        },
+        "not_for": {
+          "default": [],
+          "description": "不适用于什么",
+          "items": {
+            "type": "string"
+          },
+          "title": "Not For",
+          "type": "array"
+        },
+        "data_period": {
+          "default": "",
+          "description": "训练数据覆盖的期间",
+          "title": "Data Period",
+          "type": "string"
+        },
+        "known_weaknesses": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Known Weaknesses",
+          "type": "array"
+        }
+      },
+      "title": "Applicability",
+      "type": "object"
+    },
+    "ArtifactRef": {
+      "additionalProperties": true,
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "purpose": {
+          "description": "这个产物是干什么用的",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "kind": {
+          "default": "other",
+          "enum": [
+            "table",
+            "figure",
+            "model",
+            "report",
+            "log",
+            "other"
+          ],
+          "title": "Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "purpose"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "ChecklistMetric": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "baseline": {
+          "default": "",
+          "description": "对照：基线是多少、差多少",
+          "title": "Baseline",
+          "type": "string"
+        },
+        "scope": {
+          "default": "",
+          "description": "口径：在哪些数据上、按什么粒度算的",
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ChecklistMetric",
+      "type": "object"
+    },
+    "DatasetRef": {
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "title": "Version",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "rows": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rows"
+        },
+        "columns": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Columns"
+        }
+      },
+      "required": [
+        "name",
+        "version",
+        "path"
+      ],
+      "title": "DatasetRef",
+      "type": "object"
+    },
+    "MonitoringItem": {
+      "additionalProperties": true,
+      "properties": {
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "string"
+        },
+        "frequency": {
+          "title": "Frequency",
+          "type": "string"
+        },
+        "action": {
+          "description": "超过阈值后做什么",
+          "title": "Action",
+          "type": "string"
+        }
+      },
+      "required": [
+        "metric",
+        "threshold",
+        "frequency",
+        "action"
+      ],
+      "title": "MonitoringItem",
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "description": "交付清单（delivery/<模型名>/checklist.yaml）。model、version、reproduce、data、metrics 的数值由平台生成；\n其余由执行 agent 或负责人填写，平台刷新时保留。",
+  "properties": {
+    "model": {
+      "title": "Model",
+      "type": "string"
+    },
+    "version": {
+      "title": "Version",
+      "type": "string"
+    },
+    "summary": {
+      "default": "",
+      "description": "一句话：交付什么、用来回答什么业务问题",
+      "title": "Summary",
+      "type": "string"
+    },
+    "reproduce": {
+      "default": [],
+      "description": "复现入口：还原代码、依赖，核对数据与模型文件，重跑训练",
+      "items": {
+        "type": "string"
+      },
+      "title": "Reproduce",
+      "type": "array"
+    },
+    "usage": {
+      "default": [],
+      "description": "使用入口：怎样用这个模型得到结果",
+      "items": {
+        "type": "string"
+      },
+      "title": "Usage",
+      "type": "array"
+    },
+    "data": {
+      "default": [],
+      "description": "训练数据版本",
+      "items": {
+        "$ref": "#/$defs/DatasetRef"
+      },
+      "title": "Data",
+      "type": "array"
+    },
+    "metrics": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ChecklistMetric"
+      },
+      "title": "Metrics",
+      "type": "array"
+    },
+    "applicability": {
+      "$ref": "#/$defs/Applicability"
+    },
+    "monitoring": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/MonitoringItem"
+      },
+      "title": "Monitoring",
+      "type": "array"
+    },
+    "deployment": {
+      "default": "待定",
+      "description": "部署方式；未定时写「待定」",
+      "title": "Deployment",
+      "type": "string"
+    },
+    "artifacts": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "open_items": {
+      "default": [],
+      "description": "交付时仍未解决、使用方需要知道的问题",
+      "items": {
+        "type": "string"
+      },
+      "title": "Open Items",
+      "type": "array"
+    }
+  },
+  "required": [
+    "model",
+    "version"
+  ],
+  "title": "DeliveryChecklist",
+  "type": "object"
+}

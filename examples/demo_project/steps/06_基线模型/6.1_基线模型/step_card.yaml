@@ -1,0 +1,34 @@
+step: "6.1"
+headline: 最好的基线是近 6 月均值，验证期 MAE 6.9544；模型必须低于这条线，可以继续
+can_continue: true
+core_numbers:
+  - label: 近 6 月均值基线 MAE
+    after: 6.9544
+    scope: 验证期 2026-01～03 共 9,000 个 SKU 月，每个 SKU 月一个绝对误差，取平均
+    source: "outputs/baseline_metrics.json#/验证期/MAE_近6月均值"
+  - label: 近 3 月均值基线 MAE
+    after: 7.4249
+    scope: 同上
+    source: "outputs/baseline_metrics.json#/验证期/MAE_近3月均值"
+  - label: 上月值基线 MAE
+    after: 8.7692
+    scope: 同上
+    source: "outputs/baseline_metrics.json#/验证期/MAE_上月值"
+operation: 三种不用训练的方法：直接拿上月值、近 3 月均值、近 6 月均值当预测，在验证期算平均绝对误差，并逐月给出。
+exceptions: []
+artifacts:
+  - {path: outputs/baseline_metrics.json, purpose: 三种基线的验证期 MAE（含逐月）与最好的基线, kind: table}
+why: 没有基线就说不清模型好在哪里；模型的误差只有低于最好的基线才值得用。
+concentration: 逐月看排序一致，2026-01、02、03 都是近 6 月均值最好（6.9283、6.9061、7.0287）
+can_say:
+  - 越平滑的方法越准：上月值 8.7692 → 近 3 月均值 7.4249 → 近 6 月均值 6.9544
+cannot_say:
+  - 还不能说基线在最终评估期的表现，最终评估期留给 7.1 的最终模型
+next: 7.1 训练线性模型，验证期 MAE 要低于 6.9544
+examples:
+  - title: SKU00302 在 2026-03 的上月值预测
+    input: SKU00302 2026-02 需求量 8，2026-03 实际需求量 17
+    rule: 上月值基线：预测 = 上月需求量
+    output: 预测 8，绝对误差 9，计入上月值基线的 MAE
+    artifact: outputs/baseline_metrics.json
+    real: true

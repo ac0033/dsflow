@@ -1,0 +1,58 @@
+/* 报告阅读排版：参考 Quarto——带标签的提示块、带语言标题的代码块、表格可横向滚动 */
+.md-body { font-size: 14px; line-height: 1.75; color: #1e293b; overflow-wrap: anywhere; }
+.md-body > :first-child { margin-top: 0; }
+.md-body h1 { font-size: 20px; font-weight: 700; margin: 0 0 12px; line-height: 1.4; }
+.md-body h2 { font-size: 17px; font-weight: 650; margin: 24px 0 8px; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0; }
+.md-body h3 { font-size: 15px; font-weight: 650; margin: 18px 0 6px; }
+.md-body h4 { font-size: 14px; font-weight: 650; margin: 14px 0 4px; }
+.md-body p { margin: 8px 0; }
+.md-body ul { list-style: disc; padding-left: 22px; margin: 8px 0; }
+.md-body ol { list-style: decimal; padding-left: 22px; margin: 8px 0; }
+.md-body li { margin: 3px 0; }
+.md-body li > p { margin: 2px 0; }
+.md-body blockquote { border-left: 3px solid #cbd5e1; padding: 2px 12px; color: #475569; margin: 10px 0; background: #f8fafc; }
+.md-body :not(pre) > code { background: #f1f5f9; padding: 1px 4px; border-radius: 4px; font-size: 0.9em; }
+.md-body a, .md-link { color: #2563eb; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.md-deadlink { color: #64748b; text-decoration: underline dotted; }
+.md-table { overflow-x: auto; margin: 10px 0; }
+.md-table table { border-collapse: collapse; font-size: 13px; line-height: 1.55; }
+.md-table th, .md-table td { border: 1px solid #e2e8f0; padding: 4px 8px; text-align: left; vertical-align: top; }
+.md-table th { background: #f8fafc; font-weight: 600; }
+.md-body img { max-width: 100%; border-radius: 6px; border: 1px solid #e2e8f0; }
+.md-body hr { border: 0; border-top: 1px solid #e2e8f0; margin: 16px 0; }
+.md-body strong { font-weight: 650; }
+.md-compact { font-size: 13px; line-height: 1.65; }
+.md-compact h1 { font-size: 15px; }
+.katex-display { overflow-x: auto; overflow-y: hidden; }
+
+.code-block { margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: #fbfcfd; }
+.code-block figcaption { display: flex; justify-content: space-between; align-items: center; padding: 3px 10px; font-size: 11px; color: #64748b; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+.code-block figcaption button { display: inline-flex; gap: 4px; align-items: center; }
+.code-block pre, .code-view { margin: 0; padding: 10px 12px; overflow-x: auto; font-size: 12.5px; line-height: 1.55; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; }
+.code-block.diagram { background: #fffdf7; }
+
+.callout { --c: #2563eb; --cb: #eff6ff; margin: 12px 0; padding: 8px 12px 9px 13px; border-left: 4px solid var(--c); background: var(--cb); border-radius: 0 8px 8px 0; }
+.callout::before { content: attr(data-label); display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: var(--c); margin-bottom: 2px; }
+.callout > :first-child { margin-top: 0; }
+.callout > :last-child { margin-bottom: 0; }
+.co-key { --c: #1d4ed8; --cb: #eff6ff; }
+.co-finding { --c: #0f766e; --cb: #f0fdfa; }
+.co-op { --c: #475569; --cb: #f8fafc; }
+.co-example { --c: #15803d; --cb: #f0fdf4; }
+.co-warn { --c: #b45309; --cb: #fffbeb; }
+.co-warn::before { content: '⚠ ' attr(data-label); }
+.co-biz { --c: #7c3aed; --cb: #f5f3ff; }
+.co-next { --c: #0369a1; --cb: #f0f9ff; }
+.co-extra { --c: #64748b; --cb: #f8fafc; }
+
+/* notebook */
+.nb-cell { margin: 10px 0; }
+.nb-in { display: flex; gap: 8px; }
+.nb-prompt { width: 52px; flex: none; text-align: right; font-size: 11px; color: #94a3b8; font-family: ui-monospace, Consolas, monospace; padding-top: 11px; }
+.nb-body { min-width: 0; flex: 1; }
+.nb-out { margin: 4px 0 0; padding: 6px 10px; font-size: 12px; line-height: 1.5; white-space: pre-wrap; background: #fff; border-left: 2px solid #cbd5e1; font-family: ui-monospace, Consolas, monospace; max-height: 480px; overflow: auto; }
+.nb-stderr { border-left-color: #f59e0b; background: #fffbeb; }
+.nb-error { border-left-color: #dc2626; background: #fef2f2; color: #7f1d1d; }
+.nb-html { margin-top: 4px; font-size: 12px; }
+.nb-html table { border-collapse: collapse; }
+.nb-html th, .nb-html td { border: 1px solid #e2e8f0; padding: 2px 6px; }

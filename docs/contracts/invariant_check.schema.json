@@ -1,0 +1,61 @@
+{
+  "additionalProperties": true,
+  "description": "步骤声明的\"必须不变\"，由平台在处理前后两份数据上自动核对。",
+  "properties": {
+    "type": {
+      "enum": [
+        "row_count_equal",
+        "row_count_max_change",
+        "sum_equal",
+        "columns_unchanged",
+        "no_new_nulls",
+        "keys_preserved"
+      ],
+      "title": "Type",
+      "type": "string"
+    },
+    "key": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Key",
+      "type": "array"
+    },
+    "columns": {
+      "default": [],
+      "items": {
+        "type": "string"
+      },
+      "title": "Columns",
+      "type": "array"
+    },
+    "column": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Column"
+    },
+    "tolerance": {
+      "default": 0.0,
+      "title": "Tolerance",
+      "type": "number"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    }
+  },
+  "required": [
+    "type"
+  ],
+  "title": "InvariantCheck",
+  "type": "object"
+}

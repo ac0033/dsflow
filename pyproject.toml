@@ -1,0 +1,76 @@
+[project]
+name = "dsflow"
+version = "0.31.0"
+description = "DSFlow：数据科学项目全周期追踪平台（本地单机版）"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "YuanLumen" }]
+requires-python = ">=3.13"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "pydantic>=2.9",
+    "pyyaml>=6.0",
+    "typer>=0.15",
+    "duckdb>=1.5.5",
+    "pyarrow>=25.0.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/ac0033/dsflow"
+Changelog = "https://github.com/ac0033/dsflow/blob/main/docs/CHANGELOG.md"
+Issues = "https://github.com/ac0033/dsflow/issues"
+
+[project.scripts]
+dsflow = "dsflow.cli:app"
+
+[project.optional-dependencies]
+mcp = [
+    "mcp>=2.2.0",
+]
+chat = [
+    "anthropic>=1.0",
+    "openai>=1.60",
+    "textual>=1.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "pandas>=3.0.5",
+    "openpyxl>=3.1.5",
+    "ruff>=0.12",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["dsflow"]
+
+# 安装包形态：模板、skill、网页构建产物打进包里（见 dsflow/paths.py）
+[tool.hatch.build.targets.wheel.force-include]
+"templates" = "dsflow/_data/templates"
+"skills" = "dsflow/_data/skills"
+"web/dist" = "dsflow/_data/web"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: 需要联网装库或扫描大目录的测试"]
+
+[tool.ruff]
+line-length = 200
+exclude = [".notes", "examples/demo_project/steps", "web"]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501", "E741"]

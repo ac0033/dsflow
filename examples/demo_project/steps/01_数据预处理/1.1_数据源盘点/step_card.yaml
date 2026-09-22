@@ -1,0 +1,49 @@
+step: "1.1"
+headline: 盘点完成：订单明细 121,000 行 × 12 列，一行 = 一个订单行；5 类质量问题逐项计数，交给 1.2 处理，可以继续
+can_continue: true
+core_numbers:
+  - label: 订单行
+    after: 121000
+    scope: orders.csv 记录数（不是不同订单号个数），下单时间 2024-07 至 2026-06，另有 2 行未来日期
+    source: "outputs/quality_issues.json#/订单行"
+  - label: 完全重复行
+    after: 1000
+    scope: 与更早某一行所有字段都相同的行（保留第一次出现的那行后多出来的行数）
+    source: "outputs/quality_issues.json#/完全重复行"
+  - label: 金额缺失
+    after: 641
+    scope: 金额为空的订单行
+    source: "outputs/quality_issues.json#/金额缺失"
+  - label: 数量为负
+    after: 364
+    scope: 数量小于 0 的订单行（退货行）
+    source: "outputs/quality_issues.json#/数量为负"
+  - label: 未来日期
+    after: 2
+    scope: 下单时间晚于 2026-06-30 的订单行
+    source: "outputs/quality_issues.json#/未来日期"
+  - label: 商品名称含首尾空白或全角字符
+    after: 3733
+    scope: 统一全角 / 半角并去掉首尾空白后会变化的订单行
+    source: "outputs/quality_issues.json#/商品名称含首尾空白或全角字符"
+operation: 只读原始文件：逐字段统计类型、缺失、不同值并给出示例；逐项计数质量问题。没有改动任何数据。
+exceptions: []
+artifacts:
+  - {path: outputs/field_inventory.csv, purpose: 订单明细逐字段：类型、缺失、不同值、示例, kind: table}
+  - {path: outputs/quality_issues.json, purpose: 质量问题逐项计数, kind: table}
+why: 需求量是订单行数量的累加，重复行和未来日期会直接让需求量失真，清洗前必须先数清楚。
+invariants:
+  - 原始文件 orders.csv、sku_catalog.xlsx 的 SHA256 在执行前后不变
+can_say:
+  - 订单明细一行 = 一个订单号下的一个 SKU
+  - 订单里的 SKU 全部能在 SKU 目录里找到（不在目录的 0 行）
+cannot_say:
+  - 还不能说重复行是怎么产生的，需要问数据来源
+next: 1.2 按这些计数清洗：删除完全重复行和未来日期，退货行与金额缺失只标记
+examples:
+  - title: 一对完全重复的订单行
+    input: 订单号 SO202407017209，下单时间 2024-07-06 05:11:16，SKU01100，数量 4，金额 2744.84——原始文件里出现 2 次
+    rule: 所有字段都相同的行算完全重复行，第二次出现的那行计 1
+    output: 完全重复行计数 +1
+    artifact: outputs/quality_issues.json
+    real: true
